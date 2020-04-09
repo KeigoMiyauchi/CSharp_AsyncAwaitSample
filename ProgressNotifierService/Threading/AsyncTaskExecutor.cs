@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ProgressNotifierService.Enumerate;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CSharp_AsyncAwaitSample.Components
+namespace ProgressNotifierService.Notifier
 {
-    class AsyncTaskExecutor
+    internal class AsyncTaskExecutor
     {
         private AsyncTaskContext context = null;
         private CancellationTokenSource _tokenSource = null;
@@ -16,13 +14,13 @@ namespace CSharp_AsyncAwaitSample.Components
         /// コンストラクタ
         /// </summary>
         /// <param name="context"></param>
-        public AsyncTaskExecutor(AsyncTaskContext context)
+        internal AsyncTaskExecutor(AsyncTaskContext context)
         {
             this.context = context;
         }
 
 
-        public async void Execute(AsyncTaskDelegate task, AsyncResultCallbackDelegate callback, object[] paramters)
+        internal async void Execute(AsyncTaskDelegate task, AsyncResultCallbackDelegate callback, object[] paramters)
         {
             object result = null;
             using (_tokenSource = new CancellationTokenSource())
@@ -46,7 +44,7 @@ namespace CSharp_AsyncAwaitSample.Components
             {
                 await Task.Run(() =>
                 {
-                    using (var scope = new AsyncTaskStatusScope(new AsyncTaskStatus(token, progress)))
+                    using (var scope = new ProgressNotifierScope(new NotifyObject(token, progress)))
                     {
                         progress.Report(new Progress(Em_AsyncTaskStatus.Processing));
 

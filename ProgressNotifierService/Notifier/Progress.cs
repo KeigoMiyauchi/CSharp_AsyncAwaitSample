@@ -1,4 +1,6 @@
-﻿namespace CSharp_AsyncAwaitSample.Components
+﻿using ProgressNotifierService.Enumerate;
+
+namespace ProgressNotifierService.Notifier
 {
     public class Progress
     {
@@ -18,7 +20,6 @@
         {
             Count = count;
             Type = Em_ProgressType.Count;
-
         }
 
         public Progress(string log)

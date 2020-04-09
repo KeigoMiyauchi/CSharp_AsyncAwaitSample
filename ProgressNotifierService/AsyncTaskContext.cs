@@ -1,13 +1,9 @@
-﻿using CSharp_AsyncAwaitSample.FW;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ProgressNotifierService.Enumerate;
+using ProgressNotifierService.Notifier;
 
-namespace CSharp_AsyncAwaitSample.Components
+namespace ProgressNotifierService
 {
-    public class AsyncTaskContext : ViewModelBase
+    public class AsyncTaskContext : PropertyChangedNotifier
     {
         private ProgressInfo progress;
         private AsyncTaskExecutor taskExecutor;

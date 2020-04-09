@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace CSharp_AsyncAwaitSample.Components
+﻿namespace ProgressNotifierService.Notifier
 {
     public class AsyncTaskArgs
     {
@@ -18,7 +11,7 @@ namespace CSharp_AsyncAwaitSample.Components
         /// <param name="progress"></param>
         /// <param name="token"></param>
         /// <param name="parameters"></param>
-        public AsyncTaskArgs(object[] parameters)
+        internal AsyncTaskArgs(object[] parameters)
         {
             this.parameters = parameters;
         }

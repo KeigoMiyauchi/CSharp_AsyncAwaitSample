@@ -55,18 +55,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Components\AsyncTaskArgs.cs" />
-    <Compile Include="Components\AsyncTaskCallbackArgs.cs" />
-    <Compile Include="Components\AsyncTaskCallbackDelegate.cs" />
-    <Compile Include="Components\AsyncTaskContext.cs" />
-    <Compile Include="Components\AsyncTaskDelegate.cs" />
-    <Compile Include="Components\AsyncTaskExecutor.cs" />
-    <Compile Include="Components\AsyncTaskStatus.cs" />
-    <Compile Include="Components\AsyncTaskStatusHolder.cs" />
-    <Compile Include="Components\AsyncTaskStatusScope.cs" />
-    <Compile Include="Components\Em_AsyncTaskStatus.cs" />
-    <Compile Include="Components\Progress.cs" />
-    <Compile Include="Components\ProgressInfo.cs" />
     <Compile Include="FW\DelegateCommands.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="FW\ViewModelBase.cs" />
@@ -84,7 +72,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ViewModel\ProgressInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -112,6 +99,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="View\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProgressNotifierService\ProgressNotifierService.csproj">
+      <Project>{bce6d541-0917-4a33-b898-8e48f987c5c4}</Project>
+      <Name>ProgressNotifierService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SampleStub\SampleStub.csproj">
+      <Project>{e4bb7afb-9dc9-4450-8bae-9ae5d0d7afa8}</Project>
+      <Name>SampleStub</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,16 +1,16 @@
-﻿using CSharp_AsyncAwaitSample.Components;
-using CSharp_AsyncAwaitSample.FW;
+﻿using CSharp_AsyncAwaitSample.FW;
+using ProgressNotifierService;
+using ProgressNotifierService.Notifier;
+using SampleStub;
 using System;
+using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace CSharp_AsyncAwaitSample.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
         private AsyncTaskContext asyncTaskContext;
-
-
         public AsyncTaskContext AsyncTaskContext
         {
             get { return this.asyncTaskContext; }
@@ -36,13 +36,11 @@ namespace CSharp_AsyncAwaitSample.ViewModel
         }
 
 
-
-
         private void Execute()
         {
             if (asyncTaskContext.CanExecuteRun())
             {
-                asyncTaskContext.Run(DoWork, DoComplete, 1000, "hoge");
+                asyncTaskContext.Run(DoWork, DoWorkCompleted, 1000, "hoge");
             }
         }
 
@@ -58,37 +56,25 @@ namespace CSharp_AsyncAwaitSample.ViewModel
         {
             object[] parameters = args.GetParameters();
 
-            bool procResult = HeavyProc((int)parameters[0], (string)parameters[1]);
+            bool procResult = new Sample().HeavyProc((int)parameters[0], (string)parameters[1]);
 
             args.SetResult(procResult);
         }
 
-        private bool HeavyProc(int p1, string p2)
+        private void DoWorkCompleted(AsyncTaskCallbackArgs args)
         {
-            int n = 40;
-            for (int i = 0; i < n; i++)
-            {
-                AsyncTaskStatusHolder.Instance.ThrowIfCancellationRequested();
-
-                Thread.Sleep(50);
-
-                AsyncTaskStatusHolder.Instance.UpdateProgress(new Progress(i * 100 / n));
-                AsyncTaskStatusHolder.Instance.UpdateProgress(new Progress(string.Format("Processing... {0}%", i * 100 / n)));
-
-                AsyncTaskStatusHolder.Instance.ThrowIfCancellationRequested();
-            }
-
-            AsyncTaskStatusHolder.Instance.UpdateProgress(new Progress(n * 100 / n));
-            AsyncTaskStatusHolder.Instance.UpdateProgress(new Progress(string.Format("Processing... {0}%", n * 100 / n)));
-
-            return true;
-        }
-
-
-        private void DoComplete(AsyncTaskCallbackArgs args)
-        {
-
         }
 
     }
+
+    public class ProgressNotifyServiceAttribute : Attribute
+    {
+        public string ServiceName { get; private set; }
+        public ProgressNotifyServiceAttribute(string seriveName)
+        {
+            ServiceName = seriveName;
+        }
+
+    }
+
 }

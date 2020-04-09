@@ -1,24 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace CSharp_AsyncAwaitSample.Components
+namespace ProgressNotifierService.Notifier
 {
-    public class AsyncTaskStatus
+    public class NotifyObject
     {
         private CancellationToken token;
         private IProgress<Progress> progress;
 
-        public AsyncTaskStatus(CancellationToken token, IProgress<Progress> progress)
+        internal NotifyObject(CancellationToken token, IProgress<Progress> progress)
         {
             this.token = token;
             this.progress = progress;
         }
 
-        public void ThrowIfCancellationRequested()
+        internal void ThrowIfCancellationRequested()
         {
             if (token != null)
             {
@@ -26,7 +22,7 @@ namespace CSharp_AsyncAwaitSample.Components
             }
         }
 
-        public void Progress(Progress progress)
+        internal void Progress(Progress progress)
         {
             this.progress.Report(progress);
         }

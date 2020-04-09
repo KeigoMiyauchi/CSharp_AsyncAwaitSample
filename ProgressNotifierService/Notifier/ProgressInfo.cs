@@ -1,10 +1,10 @@
-﻿using CSharp_AsyncAwaitSample.FW;
+﻿using ProgressNotifierService.Enumerate;
 using System;
 using System.Diagnostics;
 
-namespace CSharp_AsyncAwaitSample.Components
+namespace ProgressNotifierService.Notifier
 {
-    public class ProgressInfo : ViewModelBase
+    public class ProgressInfo : PropertyChangedNotifier
     {
         private int count;
 
@@ -46,7 +46,7 @@ namespace CSharp_AsyncAwaitSample.Components
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public ProgressInfo()
+        internal ProgressInfo()
         {
             Clear();
         }
@@ -89,17 +89,17 @@ namespace CSharp_AsyncAwaitSample.Components
             }
         }
 
-        public void UpdateCount(int count)
+        internal void UpdateCount(int count)
         {
             this.Count = count;
         }
 
-        public void AppendLine(string log)
+        internal void AppendLine(string log)
         {
             this.Log += log + Environment.NewLine;
         }
 
-        public void UpdateStatus(Em_AsyncTaskStatus status)
+        internal void UpdateStatus(Em_AsyncTaskStatus status)
         {
             this.Status = status;
 
