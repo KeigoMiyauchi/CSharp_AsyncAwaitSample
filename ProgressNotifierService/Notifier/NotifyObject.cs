@@ -26,5 +26,11 @@ namespace ProgressNotifierService.Notifier
         {
             this.progress.Report(progress);
         }
+
+        internal bool IsCancellationRequested()
+        {
+            return token.IsCancellationRequested;
+        }
+
     }
 }

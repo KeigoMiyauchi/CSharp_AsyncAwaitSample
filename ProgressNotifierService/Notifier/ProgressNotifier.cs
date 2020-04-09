@@ -35,5 +35,15 @@ namespace ProgressNotifierService.Notifier
                 obj.ThrowIfCancellationRequested();
             }
         }
+
+        public static bool IsCancellationRequested()
+        {
+            NotifyObject obj;
+            if (currentStatus.TryGetValue(NotifierId.GetKey(Thread.CurrentThread), out obj))
+            {
+                return obj.IsCancellationRequested();
+            }
+            return false;
+        }
     }
 }
