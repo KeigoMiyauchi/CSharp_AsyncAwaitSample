@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CSharp_AsyncAwaitSample.FW
 {
-    public abstract class ViewModel : INotifyPropertyChanged
+    public abstract class ViewModelBase : INotifyPropertyChanged
     {
         #region PropertyChanged インターフェース
 

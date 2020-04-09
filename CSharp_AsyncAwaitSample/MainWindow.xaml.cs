@@ -1,4 +1,4 @@
-﻿using CSharp_AsyncAwaitSample.Data;
+﻿using CSharp_AsyncAwaitSample.ViewModel;
 using System.Windows;
 
 namespace CSharp_AsyncAwaitSample

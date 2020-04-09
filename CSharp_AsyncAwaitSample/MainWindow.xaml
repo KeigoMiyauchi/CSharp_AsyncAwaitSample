@@ -44,13 +44,13 @@
 
                 <Grid>
                     <ProgressBar
-                    Value="{Binding ProgInfo.Progress}"
+                    Value="{Binding AsyncTaskContext.Progress.Count}"
                     Minimum="0"
                     Maximum="100"
                     Width="200"
                     Height="40"/>
                     <TextBlock 
-                        Text="{Binding ProgInfo.Progress}"
+                        Text="{Binding AsyncTaskContext.Progress.Count}"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Foreground="Black"
@@ -78,7 +78,7 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Background="#20FFFFFF"
-                    Content="{Binding ProgInfo.ProcessLog}"
+                    Content="{Binding AsyncTaskContext.Progress.Log}"
                     Foreground="White"
                 />
             </ScrollViewer>

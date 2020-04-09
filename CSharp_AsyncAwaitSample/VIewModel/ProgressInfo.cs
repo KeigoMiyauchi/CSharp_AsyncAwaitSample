@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharp_AsyncAwaitSample.Data
+namespace CSharp_AsyncAwaitSample.ViewModel
 {
-    public class ProgressInfo : ViewModel
+    public class ProgressInfo : ViewModelBase
     {
         private int _Progress;
         private string _ProcessLog;
@@ -38,23 +38,6 @@ namespace CSharp_AsyncAwaitSample.Data
             {
                 _ProcessLog = value;
                 OnPropertyChanged("ProcessLog");
-            }
-        }
-
-        public void SetProgress(ProgressArgs args)
-        {
-            if(args.Type == ProgressArgs.ProgressType.Count)
-            {
-                SetCount(args.Count);
-            }
-            else if(args.Type == ProgressArgs.ProgressType.Log)
-            {
-                AppendLineLog(args.Log);
-            }
-            else if (args.Type == ProgressArgs.ProgressType.Both)
-            {
-                SetCount(args.Count);
-                AppendLineLog(args.Log);
             }
         }
 

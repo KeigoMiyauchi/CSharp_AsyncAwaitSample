@@ -1,33 +1,23 @@
-﻿using CSharp_AsyncAwaitSample.FW;
+﻿using CSharp_AsyncAwaitSample.Components;
+using CSharp_AsyncAwaitSample.FW;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CSharp_AsyncAwaitSample.Data
+namespace CSharp_AsyncAwaitSample.ViewModel
 {
-    public class MainViewModel : ViewModel
+    public class MainViewModel : ViewModelBase
     {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public MainViewModel()
-        {
-            _progInfo = new ProgressInfo();
-            ExecuteCommnad = new DelegateCommand(Execute, CanExecute);
-            CancelCommnad = new DelegateCommand(Cancel, CanCancel);
-        }
+        private AsyncTaskContext asyncTaskContext;
 
-        private ProgressInfo _progInfo = null;
-        private bool _executing = false;
-        private CancellationTokenSource _tokenSource = null;
 
-        public ProgressInfo ProgInfo
+        public AsyncTaskContext AsyncTaskContext
         {
-            get { return _progInfo; }
+            get { return this.asyncTaskContext; }
             set
             {
-                _progInfo = value;
-                OnPropertyChanged("ProgInfo");
+                this.asyncTaskContext = value;
+                OnPropertyChanged("AsyncTaskContext");
             }
         }
 
@@ -35,77 +25,70 @@ namespace CSharp_AsyncAwaitSample.Data
         public DelegateCommand CancelCommnad { get; set; }
 
 
-
-
-        private bool CanExecute()
-        {
-            return !_executing;
-        }
-
-        private bool CanCancel()
-        {
-            return _executing;
-        }
-
-        private async void Execute()
-        {
-            try
-            {
-                using (_tokenSource = new CancellationTokenSource())
-                {
-                    await ExecuteAsync(_tokenSource.Token);
-                }
-            }
-            catch (OperationCanceledException)
-            {
-                // Cancel
-                _executing = false;
-            }
-        }
-
-        private async Task ExecuteAsync(CancellationToken token)
-        {
-            ProgInfo.Clear();
-
-            // An object that notifies the main thread of progress
-            var progress = new Progress<ProgressArgs>(ProgInfo.SetProgress);
-
-            await Task.Run(() => DoWork(progress, 100, token));
-
-        }
-
         /// <summary>
-        /// Heavy Work
+        /// Constructor
         /// </summary>
-        private void DoWork(IProgress<ProgressArgs> progress, int n, CancellationToken token)
+        public MainViewModel()
         {
-            _executing = true;
-
-            for(int i = 0;i < n; i++)
-            {
-                token.ThrowIfCancellationRequested();
-                
-                Thread.Sleep(50);
-                
-                progress.Report(new ProgressArgs(i * 100/ n));
-                progress.Report(new ProgressArgs(string.Format("Processing... {0}%", i * 100 / n)));
-
-                token.ThrowIfCancellationRequested();
-            }
-
-            progress.Report(new ProgressArgs(n * 100 / n));
-            progress.Report(new ProgressArgs(string.Format("Processing... {0}%", n * 100 / n)));
-            _executing = false;
+            asyncTaskContext = new AsyncTaskContext();
+            ExecuteCommnad = new DelegateCommand(Execute, AsyncTaskContext.CanExecuteRun);
+            CancelCommnad = new DelegateCommand(Cancel, AsyncTaskContext.CanExecuteCancel);
         }
 
+
+
+
+        private void Execute()
+        {
+            if (asyncTaskContext.CanExecuteRun())
+            {
+                asyncTaskContext.Run(DoWork, DoComplete, 1000, "hoge");
+            }
+        }
 
         private void Cancel()
         {
-            if (_tokenSource == null) { return; }
-
-            _tokenSource.Cancel();
+            if (asyncTaskContext.CanExecuteCancel())
+            {
+                asyncTaskContext.Cancel();
+            }
         }
 
+        private void DoWork(AsyncTaskArgs args)
+        {
+            object[] parameters = args.GetParameters();
+
+            bool procResult = HeavyProc((int)parameters[0], (string)parameters[1]);
+
+            args.SetResult(procResult);
+        }
+
+        private bool HeavyProc(int p1, string p2)
+        {
+            int n = 40;
+            for (int i = 0; i < n; i++)
+            {
+                AsyncTaskStatusHolder.Instance.ThrowIfCancellationRequested();
+
+                Thread.Sleep(50);
+
+                AsyncTaskStatusHolder.Instance.UpdateProgress(new Progress(i * 100 / n));
+                AsyncTaskStatusHolder.Instance.UpdateProgress(new Progress(string.Format("Processing... {0}%", i * 100 / n)));
+
+                AsyncTaskStatusHolder.Instance.ThrowIfCancellationRequested();
+            }
+
+            AsyncTaskStatusHolder.Instance.UpdateProgress(new Progress(n * 100 / n));
+            AsyncTaskStatusHolder.Instance.UpdateProgress(new Progress(string.Format("Processing... {0}%", n * 100 / n)));
+
+            return true;
+        }
+
+
+        private void DoComplete(AsyncTaskCallbackArgs args)
+        {
+
+        }
 
     }
 }
